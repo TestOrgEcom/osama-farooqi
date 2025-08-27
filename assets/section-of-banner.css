@@ -1,0 +1,11 @@
+@media screen and (max-width: 749px) {
+  /* Default theme break point for mobile */
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  /* Default theme break point for tablets */
+}
+
+@media screen and (max-width: 989px) {
+  /* Default theme break point for desktop and big screens */
+}
