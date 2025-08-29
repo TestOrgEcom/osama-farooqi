@@ -19,7 +19,10 @@
   .section-{{ section.id }} .of-header-container .of-color-bg {  
     background-color: {{ section.settings.of_header_bg_color }}; 
   }
-
+  
+ .section-{{ section.id }} .of-text-bar-container .of-color-bg {  
+    background-color: {{ section.settings.of_text_bar_bg_color }}; 
+  }
  @media screen and (max-width: 749px) {
     .section-{{ section.id }} .of-banner-container .of-banner {  
       background-image: url('{{ section.settings.of_banner_image_mobile | image_url: 'master' | image_url }}'); /* set the background image */
@@ -44,7 +47,7 @@
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
     <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      <div class="of-container of-banner-container of-header-container">
+      <div class="of-container of-banner-container of-header-container of-text-bar-container">
         <!-- Banner Header: start -->
         <div class="of-header of-color-bg">
           <p class="of-header-icon">
@@ -96,6 +99,10 @@
         <!-- Banner: end -->
 
         <!-- Banner Bottom: start -->
+          <div class="of-text-bar of-color-bg">
+            {%- if section.settings.of_text_bar_text != blank -%}<p class="of-text-bar-text of-desktop-only">{{ section.settings.of_text_bar_text  }}</p>{% endif %}
+            {%- if section.settings.of_text_bar_mobile_text != blank -%}<p class="of-text-bar-text of-mobile-only">{{ section.settings.of_text_bar_mobile_text  }}</p>{% endif %}
+          </div>
         <!-- Banner Bottom: end -->
       </div>
     </div>
@@ -188,7 +195,25 @@
     },
     {
       "type": "header",
-      "content": "Bottom bar settings"
+      "content": "Text bar settings"
+    },
+    {
+      "type": "text",
+      "id": "of_text_bar_text",
+      "label": "Text",
+      "default": "Text goes here"
+    },
+    {
+      "type": "text",
+      "id": "of_text_bar_mobile_text",
+      "label": "Text Mobile",
+      "default": "Text goes here for mobile"
+    },
+    {
+      "type": "color",
+      "id": "of_text_bar_bg_color",
+      "label": "Background color",
+      "default": "#F5F5F5"
     },
     {
       "type": "color_scheme",
