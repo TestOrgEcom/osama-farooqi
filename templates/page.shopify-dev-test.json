@@ -21,6 +21,11 @@
       "type": "of-banner",
       "name": "Of Banner",
       "settings": {
+        "of_logo": "shopify://shop_images/banner_icon_387a6552-2f40-4ae0-b687-53f66ca5c0d2.svg",
+        "of_header_text": "Find the ideal gift for your loved ones.",
+        "of_header_button_text": "Choose Gift",
+        "of_header_button_url": "",
+        "of_header_bg_color": "#334fb4",
         "of_banner_image": "shopify://shop_images/bg_banner_image.png",
         "of_banner_image_mobile": "shopify://shop_images/bg_banner_image_mobile.png",
         "banner_heading": "The Gift Guide",
@@ -28,6 +33,9 @@
         "banner_description_mobile": "Discover Joy: Your Ultimate Holiday Gift Destination.",
         "of_button_text": "Shop Now",
         "of_button_url": "",
+        "of_text_bar_text": "Text goes here",
+        "of_text_bar_mobile_text": "Text goes here for mobile",
+        "of_text_bar_bg_color": "#ef0a0a",
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0
