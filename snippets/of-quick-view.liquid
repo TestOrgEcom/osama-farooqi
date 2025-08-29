@@ -1,0 +1,21 @@
+{{ 'component-of-quick-view.css' | asset_url | stylesheet_tag: preload: true }}
+<!-- add hidden in of-quick-view class -->
+<div id="of-overlay-{{ product.id }}" class="of-overlay">
+  <div
+    id="of-quick-view-modal-{{ product.id }}"
+    class="of-quick-view"
+    aria-modal="true"
+  >
+    <img
+      src="{{ "icon-close-quick-view.svg"| asset_url }}"
+      alt="quick view close button"
+      id="of-quick-view-close-{{ product.id }}"
+      class="of-quick-view-close"
+      width="22"
+      height="22"
+    >
+    <div id="of-quick-view-prodcut-info--{{ product.id }}" class="of-quick-view-title"></div>
+  </div>
+</div>
+
+<script src="{{ 'of-quick-view.js' | asset_url }}" defer="defer"></script>

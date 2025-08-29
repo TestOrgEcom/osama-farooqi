@@ -1,4 +1,5 @@
 {{ 'component-of-button.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'component-of-quick-view.css' | asset_url | stylesheet_tag: preload: true }}
 {{ 'section-of-product-collection.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
@@ -17,59 +18,289 @@
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
-    <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      <div class="of-container of-product-collection-container">
-        {% if section.settings.of_heading %}
-          <p>{{ section.settings.of_heading }}</p>
-        {% endif %}
-        <div class="of-product-collection">
-          {% for block in section.blocks %}
-            {% case block.type %}
-              {% when 'product' %}
-                {% if block.settings.product != blank %}
-                  <div class="of-product-collection-item">
+    <div class="of-container of-product-collection-container">
+      {% if section.settings.of_heading %}
+        <p class="of-product-collection-heading">{{ section.settings.of_heading }}</p>
+      {% endif %}
+      <div class="of-product-collection">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'product' %}
+              {% if block.settings.product != blank %}
+                <div class="of-product-collection-item">
+                  <img
+                    src="{{ block.settings.product.featured_image | img_url: 'master'}}"
+                    alt="{{ block.settings.product.title | escape }}"
+                    width="433"
+                    height="444"
+                  >
+                  <span
+                    class="of-hotspot-icon"
+                    style="
+                      position:absolute;
+                      top: {{ block.settings.of-pos-y }}%;
+                      left: {{ block.settings.of-pos-x }}%;
+                      {% comment %} transform: translate(-50%, -50%); {% endcomment %}
+                      border-radius:50%;
+                    "
+                    data-top-mobile="{{ block.settings.of-pos-y-mobile }}"
+                    data-left-mobile="{{ block.settings.of-pos-x-mobile }}"
+                    data-handle="{{ block.settings.product.handle }}"
+                    data-product-id="{{ block.settings.product.id }}"
+                    onclick="ofShowQuickView(this)"
+                  >
                     <img
-                      src="{{ block.settings.product.featured_image | img_url: 'master'}}"
-                      alt="{{ block.settings.product.title | escape }}"
+                      src="{{ 'icon-plus-in-circle.svg' | asset_url }}"
+                      class="of-product-popup"
+                      width="22"
+                      height="22"
                     >
-                    <span
-                      class="of-hotspot-icon"
-                      style="
-                        position:absolute;
-                        top: {{ block.settings.of-pos-y }}%;
-                        left: {{ block.settings.of-pos-x }}%;
-                        {% comment %} transform: translate(-50%, -50%); {% endcomment %}
-                        border-radius:50%;
-                      "
-                      data-top-mobile="{{ block.settings.of-pos-y-mobile }}"
-                      data-left-mobile="{{ block.settings.of-pos-x-mobile }}"
-                    >
+                  </span>
+                </div>
+                <div id="of-overlay-{{ block.settings.product.id }}" class="of-overlay">
+                  <div
+                    id="of-quick-view-modal-{{ block.settings.product.id }}"
+                    class="of-quick-view"
+                    aria-modal="true"
+                  >
+                    <div class="of-quick-view-close-container">
                       <img
-                        src="{{ 'icon-plus-in-circle.svg' | asset_url }}"
-                        class="of-product-popup"
+                        src="{{ "icon-close-quick-view.svg"| asset_url }}"
+                        alt="quick view close button"
+                        id="of-quick-view-close-{{ block.settings.product.id }}"
+                        class="of-quick-view-close"
                         width="22"
                         height="22"
                       >
-                    </span>
+                    </div>
+                    <div id="of-quick-view-product-info--{{ block.settings.product.id }}" class="of-quick-view-title">
+                      <!-- Product info will be loaded here dynamically -->
+                      <div class="of-product-container">
+                        <div class="of-product-details">
+                          <div class="of-product-image">
+                            <img
+                              src="{{ block.settings.product.featured_image | img_url: 'master'}}"
+                              alt="{{ block.settings.product.alt | img_url: 'master'}}"
+                              width="120"
+                              height="140"
+                            >
+                          </div>
+                          <div class="of-product-info">
+                            <h2 class="of-product-title">{{ block.settings.product.title }}</h2>
+                            <p class="of-product-price">{{ block.settings.product.price | money_with_currency }}</p>
+                            <p class="of-product-description">{{ block.settings.product.description | strip_html }}</p>
+                          </div>
+                        </div>
+                        <div class="of-product-varients">
+                          <div class="of-product-varients-optins">
+                            {% for option in block.settings.product.options_with_values %}
+                              {% liquid
+                                assign option_name = option.name | downcase
+                              %}
+                              {% case option_name %}
+                                {% when 'color', 'colour' %}
+                                  <div class="of-option-color">
+                                    {{ option.name }}
+                                    <div class="of-option-color-values">
+                                      {% for value in option.values %}
+                                        <div
+                                          class="of-color-swatch"
+                                          {% comment %} style="background-color: {{ value | downcase }};" {% endcomment %}
+                                          title="{{ value }}"
+                                        >
+                                          <span
+                                            class=""
+                                            style="background-color: {{ value | downcase }}; "
+                                          ></span>
+                                          {{ value | downcase }}
+                                        </div>
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                {% when 'size' %}
+                                  <div class="of-option-size">
+                                    {{ option.name }}
+                                    <div
+                                      name="size"
+                                      id="of-size-select-{{ block.settings.product.id }}"
+                                      class="of-size-dropdown"
+                                    >
+                                      <p class="of-size-dropdown-title">
+                                        Choose your size
+                                        <span
+                                          onclick="showSelectionDropdown(this)"
+                                          data-prodcut-id="{{ block.settings.product.id }}"
+                                          ><img
+                                            src="{{ 'icon-dropdown-down-arrow-down.svg' | asset_url }}"
+                                            class="icon-arrow-down"
+                                            width="12"
+                                            height="6">
+                                          <img
+                                            src="{{ 'icon-dropdown-down-arrow-up.svg' | asset_url }}"
+                                            class="icon-arrow-up          "
+                                            width="12"
+                                            height="6"
+                                        ></span>
+                                      </p>
+                                      <div
+                                        class="of-size-dropdown-values"
+                                      >
+                                        {% for value in option.values %}
+                                          <p value="{{ value | downcase }}" class="of-size-values-items">
+                                            {{ value | upcase }}
+                                          </p>
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  </div>
+                              {% endcase %}
+                            {% endfor %}
+                          </div>
+                          <a
+                            href=""
+                            class="sweep-link of-button of-button-scandory of-desktop-only"
+                            aria-label="add to cart button"
+                          >
+                            ADD TO CART
+                            <img alt="Banner Icon" width="24" height="auto" style="margin-left: 20px;">
+                            <!-- Arrow Icon, will replace the icon using css styling -->
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                {% endif %}
-            {% endcase %}
-          {% endfor %}
-        </div>
+                </div>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
+
+<!-- add hidden in of-quick-view class -->
+{% comment %}
+  <div id="of-overlay-{{ section.id }}" class="of-overlay">
+    <div
+      id="of-quick-view-modal-{{ section.id }}"
+      class="of-quick-view"
+      aria-modal="true"
+    >
+      <div class="of-quick-view-close-container">
+        <img
+          src="{{ "icon-close-quick-view.svg"| asset_url }}"
+          alt="quick view close button"
+          id="of-quick-view-close-{{ section.id }}"
+          class="of-quick-view-close"
+          width="22"
+          height="22"
+        >
+      </div>
+      <div id="of-quick-view-product-info--{{ section.id }}" class="of-quick-view-title">
+        <!-- Product info will be loaded here dynamically -->
+      </div>
+    </div>
+  </div>
+{% endcomment %}
+
 <script>
-  document.querySelectorAll('.of-hotspot-icon').forEach((el) => {
-    el.style.setProperty('--top-mobile', el.dataset.topMobile + '%');
-    el.style.setProperty('--left-mobile', el.dataset.leftMobile + '%');
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('Quick view script loaded');
+    
+    
+    
+    //const hotspots = document.querySelectorAll('.of-hotspot-icon');
+    const overlay = document.getElementById('of-overlay-{{ section.id }}');
+    const closeBtn = document.getElementById('of-quick-view-close-{{ section.id }}');
+
+    {% comment %} hotspots.forEach((hotspot) => {
+      hotspot.addEventListener('click', () => {
+        const productHandle = hotspot.getAttribute('data-handle');
+        const productInfoContainer = document.getElementById('of-quick-view-product-info--{{ section.id }}');
+        productInfoContainer.innerHTML = 'loading...';
+
+        // Fetch product info from Shopify's Storefront API
+        fetch(`/products/${productHandle}.js`)
+          .then((response) => response.json())
+          .then((product) => {
+            // Populate the popup with product info
+            productInfoContainer.innerHTML = `
+            <div class="of-product-container">
+              <div class="of-product-image">  
+              <img src="${product.images[0]}" alt="${product.title}" width="120" height="140">
+              </div>
+              <div class="of-product-info">
+                <h2 class="of-product-title">${product.title}</h2>
+                <p class="of-product-price">Price: ${(product.price / 100).toFixed(2)}</p>
+                <p class="of-product-description">${product.description.replace(/<[^>]+>/g, '')}</p>
+              </div>
+            </div>  
+            
+            `;
+          })
+          .catch((error) => {
+            console.error('Error fetching product data:', error);
+            productInfoContainer.innerHTML = '<p>Error loading product information.</p>';
+          });
+
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // disable scroll
+      });
+    }); 
+    closeBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      document.body.style.overflow = 'auto'; // enable scroll back
+    });
+
+    // Close if clicking outside popup
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }); {% endcomment %}
+
+
+
   });
+
+    function ofShowQuickView(quickViewModel){
+          console.log('ofShowQuickView clicked');
+          const productId = quickViewModel.getAttribute('data-product-id');
+          const overlay = document.getElementById('of-overlay-'+ productId);
+          const closeBtn = document.getElementById('of-quick-view-close-'+ productId);
+
+          overlay.style.display = 'flex';
+          document.body.style.overflow = 'hidden'; // disable scroll
+            
+          closeBtn.addEventListener('click', () => {
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto'; // enable scroll back
+          });
+
+        // Close if clicking outside popup
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+          }
+        });
+    }
+
+    function showSelectionDropdown(downarrow){
+      const productId = downarrow.getAttribute('data-prodcut-id');
+      const dropdownSelect = document.getElementById('of-size-select-' + productId);
+      // Toggle visibility
+      dropdownSelect.classList.toggle('open');
+    }
 </script>
-{% comment %} <script src="{{ '.js' | asset_url }}" defer="defer"></script> {% endcomment %}
+{% comment %} <script src="{{ 'of-quick-view.js' | asset_url }}" defer="defer"></script> {% endcomment %}
+
+{% comment %} {% render 'of-quick-view' %} {% endcomment %}
+<script src="{{ 'section-of-product-colleciton.js' | asset_url }}" defer="defer"></script>
 {% schema %}
 {
-  "name": "Of Prodcut Collection",
+  "name": "Of product Collection",
   "tag": "section",
   "class": "section",
   "disabled_on": {
@@ -162,7 +393,7 @@
   ],
   "presets": [
     {
-      "name": "Of Prodcut Collection",
+      "name": "Of product Collection",
       "blocks": [
         {
           "type": "product"
