@@ -16,11 +16,11 @@
   border-radius: 8px;
  }
 
-  .section-{{ section.id }} .of-header-container .of-color-bg {  
+  .section-{{ section.id }} .of-header-container .of-color-bg-header {  
     background-color: {{ section.settings.of_header_bg_color }}; 
   }
-  
- .section-{{ section.id }} .of-text-bar-container .of-color-bg {  
+
+ .section-{{ section.id }} .of-text-bar-container .of-color-bg-text-bar {  
     background-color: {{ section.settings.of_text_bar_bg_color }}; 
   }
  @media screen and (max-width: 749px) {
@@ -49,7 +49,7 @@
     <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <div class="of-container of-banner-container of-header-container of-text-bar-container">
         <!-- Banner Header: start -->
-        <div class="of-header of-color-bg">
+        <div class="of-header of-color-bg-header">
           <p class="of-header-icon">
             {%- if section.settings.of_logo != blank -%}
               <img src="{{ section.settings.of_logo | image_url }}" alt="Logo Icon" width="150" height="auto">
@@ -99,7 +99,7 @@
         <!-- Banner: end -->
 
         <!-- Banner Bottom: start -->
-          <div class="of-text-bar of-color-bg">
+          <div class="of-text-bar of-color-bg-text-bar">
             {%- if section.settings.of_text_bar_text != blank -%}<p class="of-text-bar-text of-desktop-only">{{ section.settings.of_text_bar_text  }}</p>{% endif %}
             {%- if section.settings.of_text_bar_mobile_text != blank -%}<p class="of-text-bar-text of-mobile-only">{{ section.settings.of_text_bar_mobile_text  }}</p>{% endif %}
           </div>
@@ -142,7 +142,7 @@
     {
       "type": "url",
       "id": "of_header_button_url",
-      "label": "Button text"
+      "label": "Button URL"
     },
     {
       "type": "color",
