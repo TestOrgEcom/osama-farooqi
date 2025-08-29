@@ -1,0 +1,13 @@
+.of-product-collection {
+display: flex;
+flex-wrap: wrap;
+}
+@media screen and (max-width: 749px) {
+}
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  /* Default theme break point for tablets */
+}
+
+@media screen and (max-width: 989px) {
+  /* Default theme break point for desktop and big screens */
+}
