@@ -1,8 +1,25 @@
+* {
+  color: red;
+}
+
+.of-product-collection-container {
+  display: block;
+}
 .of-product-collection {
-display: flex;
-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.of-product-collection .of-product-collection-item {
+  flex: 0 0 calc(33% - 20px);
+  position: relative;
+  display: inline-block;
 }
 @media screen and (max-width: 749px) {
+  .of-hotspot-icon {
+    top: var(--top-mobile, 50%) !important;
+    left: var(--left-mobile, 50%) !important;
+  }
 }
 @media screen and (min-width: 750px) and (max-width: 989px) {
   /* Default theme break point for tablets */

@@ -18,20 +18,41 @@
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
     <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      <div class="of-container of-product-collection">
+      <div class="of-container of-product-collection-container">
         {% if section.settings.of_heading %}
           <p>{{ section.settings.of_heading }}</p>
         {% endif %}
-        <div class="of-product-colletion">
+        <div class="of-product-collection">
           {% for block in section.blocks %}
             {% case block.type %}
               {% when 'product' %}
-                <img
-                  src="{{ block.settings.of_product.featured_image | image_url: 'master' }}"
-                  alt="{{ block.settings.of_product.alt | escape | default: routes.title }}"
-                  width="auto"
-                  height="auto"
-                >
+                {% if block.settings.product != blank %}
+                  <div class="of-product-collection-item">
+                    <img
+                      src="{{ block.settings.product.featured_image | img_url: 'master'}}"
+                      alt="{{ block.settings.product.title | escape }}"
+                    >
+                    <span
+                      class="of-hotspot-icon"
+                      style="
+                        position:absolute;
+                        top: {{ block.settings.of-pos-y }}%;
+                        left: {{ block.settings.of-pos-x }}%;
+                        {% comment %} transform: translate(-50%, -50%); {% endcomment %}
+                        border-radius:50%;
+                      "
+                      data-top-mobile="{{ block.settings.of-pos-y-mobile }}"
+                      data-left-mobile="{{ block.settings.of-pos-x-mobile }}"
+                    >
+                      <img
+                        src="{{ 'icon-plus-in-circle.svg' | asset_url }}"
+                        class="of-product-popup"
+                        width="22"
+                        height="22"
+                      >
+                    </span>
+                  </div>
+                {% endif %}
             {% endcase %}
           {% endfor %}
         </div>
@@ -39,7 +60,12 @@
     </div>
   </div>
 </div>
-
+<script>
+  document.querySelectorAll('.of-hotspot-icon').forEach((el) => {
+    el.style.setProperty('--top-mobile', el.dataset.topMobile + '%');
+    el.style.setProperty('--left-mobile', el.dataset.leftMobile + '%');
+  });
+</script>
 {% comment %} <script src="{{ '.js' | asset_url }}" defer="defer"></script> {% endcomment %}
 {% schema %}
 {
@@ -49,7 +75,6 @@
   "disabled_on": {
     "groups": ["header", "footer"]
   },
-  "max_blocks": 6,
   "settings": [
     {
       "type": "text",
@@ -86,19 +111,78 @@
     {
       "type": "product",
       "name": "Product",
-      "limit": 6,
       "settings": [
         {
           "type": "product",
-          "id": "of_product",
-          "label": "Product"
+          "id": "product",
+          "label": "Select product"
+        },
+        {
+          "type": "range",
+          "id": "of-pos-x",
+          "label": "Horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-y",
+          "label": "Vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-x-mobile",
+          "label": "Horizontal position mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-y-mobile",
+          "label": "Vertical position mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Of Prodcut Collection"
+      "name": "Of Prodcut Collection",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
     }
   ]
 }
