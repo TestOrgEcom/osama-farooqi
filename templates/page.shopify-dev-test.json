@@ -17,12 +17,92 @@
         "padding_bottom": 28
       }
     },
+    "of_product_collection_cVBrXn": {
+      "type": "of-product-collection",
+      "blocks": {
+        "product_K8kBgR": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        },
+        "product_AhrfPd": {
+          "type": "product",
+          "settings": {
+            "product": "blue-silk-tuxedo",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        },
+        "product_bdcJqG": {
+          "type": "product",
+          "settings": {
+            "product": "chequered-red-shirt",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        },
+        "product_zzdpjb": {
+          "type": "product",
+          "settings": {
+            "product": "classic-leather-jacket",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        },
+        "product_9kKtTV": {
+          "type": "product",
+          "settings": {
+            "product": "classic-varsity-top",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        },
+        "product_9hgY3D": {
+          "type": "product",
+          "settings": {
+            "product": "dark-denim-top",
+            "of-pos-x": 50,
+            "of-pos-y": 50,
+            "of-pos-x-mobile": 50,
+            "of-pos-y-mobile": 50
+          }
+        }
+      },
+      "block_order": [
+        "product_K8kBgR",
+        "product_AhrfPd",
+        "product_bdcJqG",
+        "product_zzdpjb",
+        "product_9kKtTV",
+        "product_9hgY3D"
+      ],
+      "name": "Of Prodcut Collection",
+      "settings": {
+        "of_heading": "Text goes here",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "of_banner_UbBYCF": {
       "type": "of-banner",
       "name": "Of Banner",
       "settings": {
         "of_logo": "shopify://shop_images/banner_icon_387a6552-2f40-4ae0-b687-53f66ca5c0d2.svg",
         "of_header_text": "Find the ideal gift for your loved ones.",
+        "of_header_text_mobile": "Text goes here for mobile",
         "of_header_button_text": "Choose Gift",
         "of_header_button_url": "https://google.com",
         "of_header_bg_color": "#f5f5f5",
@@ -44,6 +124,7 @@
   },
   "order": [
     "main",
+    "of_product_collection_cVBrXn",
     "of_banner_UbBYCF"
   ]
 }
