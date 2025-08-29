@@ -21,7 +21,13 @@
       "type": "of-banner",
       "name": "Of Banner",
       "settings": {
-        "heading_size": "h1",
+        "of_banner_image": "shopify://shop_images/bg_banner_image.png",
+        "of_banner_image_mobile": "shopify://shop_images/bg_banner_image_mobile.png",
+        "banner_heading": "The Gift Guide",
+        "banner_description": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.",
+        "banner_description_mobile": "Discover Joy: Your Ultimate Holiday Gift Destination.",
+        "of_button_text": "Shop Now",
+        "of_button_url": "",
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0
