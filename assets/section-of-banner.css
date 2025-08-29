@@ -1,3 +1,39 @@
+/* Banner Header styling */
+.of-header-container .of-header {
+  display: flex;
+  gap: 20px;
+  text-align: center;
+  justify-content: space-between;
+  text-align: center;
+  height: 64px;
+}
+
+.of-header-container > .of-header:nth-child(1) {
+  flex: 0 0 30%;
+}
+.of-header-container > .of-header:nth-child(2) {
+  flex: 0 0 60%;
+}
+.of-header-container > .of-header:nth-child(3) {
+  flex: 0 0 30%;
+}
+
+.of-header-container .of-header {
+  padding: 0 50px;
+  align-items: center;
+}
+.of-header-container .of-header p {
+  margin: 0;
+  padding: 0;
+}
+.of-header-container .of-header .of-header-text {
+  line-height: 13.42px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+
+/* Banner styling */
 .of-banner-container .of-banner {
   position: relative;
 }
