@@ -1,5 +1,74 @@
+.of-banner-container .of-banner {
+  position: relative;
+}
+.of-banner-container .of-banner .of-banner-content {
+  position: absolute;
+  bottom: 50px;
+  left: 67px;
+}
+
+.of-banner-container .of-banner .of-banner-content .banner-heading {
+  font-size: 70px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 0 0 50px 0;
+  padding: 0;
+}
+.of-banner-container .of-banner .of-banner-content .banner-description {
+  font-size: 20px;
+  line-height: 140%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 0 0 50px 0;
+  padding: 0;
+  width: 483px;
+}
+
+/* Banner bottom  */
+.of-banner-container .of-banner-bottom {
+ display: flex;
+ justify-content: center;
+}
+
+.of-banner-container .of-banner-bottom .of-banner-bottom-text {
+    padding: 10px 0;
+    margin: 0px;
+    line-height: 13.42px;
+    letter-spacing: 0px;
+    vertical-align: middle;
+}
+
 @media screen and (max-width: 749px) {
   /* Default theme break point for mobile */
+  .of-banner-container .of-banner .of-banner-content {
+    bottom: unset;
+    left: unset;
+    padding-top: 50px;
+    text-align: center;
+    height: -webkit-fill-available;
+    position: relative;
+  }
+  .of-banner-container .of-banner .of-banner-content .banner-heading {
+    font-size: 30px;
+    line-height: 100%;
+    margin:0 0 20px 0;
+  }
+
+  .of-banner-container .of-banner .of-banner-content .banner-description {
+    font-size: 16px;
+    line-height: 130%;
+    width: auto;
+    margin: 0;
+  }
+  .of-banner-container .of-banner .of-banner-content .of-banner-button {
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    position: absolute;
+
+  }
 }
 
 @media screen and (min-width: 750px) and (max-width: 989px) {

@@ -1,9 +1,32 @@
+{{ 'component-of-button.css' | asset_url | stylesheet_tag }}
 {{ 'section-of-banner.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+   
+ .section-{{ section.id }} .of-banner-container .of-banner {  
+  background-image: url('{{ section.settings.of_banner_image | image_url: 'master' | image_url }}'); /* set the background image */
+  height: 780px;
+  background-size: cover;     
+  background-position: center; 
+  background-repeat: no-repeat; 
+  border-radius: 8px;
+ }
+
+ @media screen and (max-width: 749px) {
+    .section-{{ section.id }} .of-banner-container .of-banner {  
+      background-image: url('{{ section.settings.of_banner_image_mobile | image_url: 'master' | image_url }}'); /* set the background image */
+      height: 421px;
+      background-size: contain;
+      background-position: bottom;
+      background-repeat: no-repeat;
+    }
+    .section-{{ section.id }} .of-banner-container .of-banner .of-banner-content .banner-description {
+      content: {{ section.settings.banner_description_mobile | escape }};
+    }
   }
 
   @media screen and (min-width: 750px) {
@@ -15,22 +38,33 @@
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="page-width page-width--narrow section-{{ section.id }}-padding">
-    <h2 class="page-title {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      {%- if section.settings.page.title != blank -%}
-        {{ section.settings.page.title | escape }}
-      {%- else -%}
-        {{ 'sections.page.title' | t }}
-      {%- endif -%}
-    </h2>
-    <div class="rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      {%- if section.settings.page.content != blank -%}
-        {{ section.settings.page.content }}
-      {%- else -%}
-        <div class="page-placeholder-wrapper placeholder">
-          {{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
-        </div>
-      {%- endif -%}
+  <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
+    <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+  
+      <div class="of-container of-banner-container">
+          <div class="of-banner">
+            <div class="of-banner-content">
+              {% if section.settings.banner_heading %}<h2 class="banner-heading">{{ section.settings.banner_heading }}</h2> {% endif %}
+              {% if section.settings.banner_description %}<p class="banner-description of-desktop-only">{{ section.settings.banner_description }}</p> {% endif %}
+              {% if section.settings.banner_description_mobile %}<p class="banner-description of-mobile-only">{{ section.settings.banner_description_mobile }}</p> {% endif %}
+                {%- if section.settings.of_button_text or section.settings.of_button_url -%}
+                  <div class="of-banner-button {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                    <p></p>
+                    <a
+                      href="{{ section.settings.of_button_url }}"
+                      class="sweep-link of-button of-button-scandory" 
+                      aria-label="{{ section.settings.of_button_text | escape | default: 'Button' }}"
+                    >
+                      {{ section.settings.of_button_text | escape | default: 'Button' | upcase}}
+                      <img alt="Banner Icon" width="24" height="auto"> <!-- Arrow Icon, will replace the icon using css styling -->
+                    </a>
+                  </div>
+                {%- endif -%}
+            </div>    
+          </div>
+        
+      </div>
+
     </div>
   </div>
 </div>
@@ -45,32 +79,43 @@
   },
   "settings": [
     {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
-        }
-      ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "type": "image_picker",
+      "id": "of_banner_image",
+      "label": "Banner image"
+    },
+    {
+      "type": "image_picker",
+      "id": "of_banner_image_mobile",
+      "label": "Banner image mobile"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner heading",
+      "default": "Text Here"
+    },
+    {
+      "type": "text",
+      "id": "banner_description",
+      "label": "Banner description",
+      "default": "Text description goes here"
+    },
+    {
+      "type": "text",
+      "id": "banner_description_mobile",
+      "label": "Banner description",
+      "default": "Text description goes here"
+    },
+    {
+      "type": "text",
+      "id": "of_button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "of_button_url",
+      "label": "Button URL"
     },
     {
       "type": "color_scheme",
