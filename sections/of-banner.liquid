@@ -1,0 +1,304 @@
+{{ 'component-of-button.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-of-banner.css' | asset_url | stylesheet_tag: preload: true }}
+
+{%- style -%}
+   .section-{{ section.id }}-padding {
+     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+   }
+
+  .section-{{ section.id }} .of-banner-container .of-banner {
+   background-image: url('{{ section.settings.of_banner_image | image_url: 'master' | image_url }}'); /* set the background image */
+   height: 780px;
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   border-radius: 8px;
+  }
+
+   .section-{{ section.id }} .of-header-container .of-color-bg-header {
+     background-color: {{ section.settings.of_header_bg_color }};
+   }
+
+  .section-{{ section.id }} .of-text-bar-container .of-color-bg-text-bar {
+     background-color: {{ section.settings.of_text_bar_bg_color }};
+   }
+  @media screen and (max-width: 749px) {
+     .section-{{ section.id }} .of-banner-container .of-banner {
+       background-image: url('{{ section.settings.of_banner_image_mobile | image_url: 'master' | image_url }}'); /* set the background image */
+       height: 421px;
+       background-size: contain;
+       background-position: bottom;
+       background-repeat: no-repeat;
+     }
+   }
+
+   @media screen and (min-width: 750px) {
+     .section-{{ section.id }}-padding {
+       padding-top: {{ section.settings.padding_top }}px;
+       padding-bottom: {{ section.settings.padding_bottom }}px;
+     }
+   }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
+    <div class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="of-container of-banner-container of-header-container of-text-bar-container">
+        <!-- Banner Header: start -->
+        <div class="of-header of-color-bg-header" id="of-header">
+          <div class="of-nav">
+            <div class="of-menu-icon of-mobile-only" id="of-menu">
+              <img
+                src="{{ 'hamburger_icon.svg' | asset_url }}"
+                class="hamburger"
+                alt="Menu Open Icon"
+                width="24"
+                height="24"
+              >
+              <img src="{{ 'close_icon.svg' | asset_url }}" class="close" alt="Menu Close Icon" width="24" height="24">
+            </div>
+            <p class="of-header-icon">
+              {%- if section.settings.of_logo != blank -%}
+                <img src="{{ section.settings.of_logo | image_url }}" alt="Logo Icon" width="150" height="auto">
+              {% endif %}
+            </p>
+            <p class="of-header-text of-desktop-only">
+              {%- if section.settings.of_header_text != blank -%}
+                {{ section.settings.of_header_text }}
+              {% endif %}
+            </p>
+            {%- if section.settings.of_header_button_text or section.settings.of_header_button_url -%}
+              <a
+                href="{{ section.settings.of_header_button_url }}"
+                class="sweep-link of-button of-desktop-only"
+                aria-label="{{ section.settings.of_header_button_text | escape | default: 'Button' }}"
+              >
+                {{ section.settings.of_header_button_text | escape | default: 'Button' | upcase }}
+                <img alt="Banner Icon" width="24" height="auto">
+                <!-- Arrow Icon, will replace the icon using css styling -->
+              </a>
+            {%- endif -%}
+          </div>
+          <div class="of-dropdown" id="of-dropdown">
+            <div class="of-header 0f-color-bg-header of-header-dropdown of-mobile-oly">
+              <p class="of-header-text">
+                {%- if section.settings.of_header_text_mobile != blank -%}
+                  {{ section.settings.of_header_text_mobile }}
+                {% endif %}
+              </p>
+              {%- if section.settings.of_header_button_text or section.settings.of_header_button_url -%}
+                <a
+                  href="{{ section.settings.of_header_button_url }}"
+                  class="sweep-link of-button"
+                  aria-label="{{ section.settings.of_header_button_text | escape | default: 'Button' }}"
+                >
+                  {{ section.settings.of_header_button_text | escape | default: 'Button' | upcase }}
+                  <img alt="Banner Icon" width="24" height="auto">
+                  <!-- Arrow Icon, will replace the icon using css styling -->
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner Header: end -->
+
+        <!-- Banner: start -->
+
+        <div class="of-banner">
+          <div class="of-banner-content">
+            {% if section.settings.banner_heading %}
+              <h2 class="banner-heading">{{ section.settings.banner_heading }}</h2>
+            {% endif %}
+            {% if section.settings.banner_description %}
+              <p class="banner-description of-desktop-only">{{ section.settings.banner_description }}</p>
+            {% endif %}
+            {% if section.settings.banner_description_mobile %}
+              <p class="banner-description of-mobile-only">{{ section.settings.banner_description_mobile }}</p>
+            {% endif %}
+            {%- if section.settings.of_button_text or section.settings.of_button_url -%}
+              <div class="of-banner-button {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                <p></p>
+                <a
+                  href="{{ section.settings.of_button_url }}"
+                  class="sweep-link of-button of-button-scandory"
+                  aria-label="{{ section.settings.of_button_text | escape | default: 'Button' }}"
+                >
+                  {{ section.settings.of_button_text | escape | default: 'Button' | upcase }}
+                  <img alt="Banner Icon" width="24" height="auto">
+                  <!-- Arrow Icon, will replace the icon using css styling -->
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <!-- Banner: end -->
+
+        <!-- Banner Bottom: start -->
+        <div class="of-text-bar of-color-bg-text-bar">
+          {%- if section.settings.of_text_bar_text != blank -%}
+            <p class="of-text-bar-text of-desktop-only">{{ section.settings.of_text_bar_text }}</p>
+          {% endif %}
+          {%- if section.settings.of_text_bar_mobile_text != blank -%}
+            <p class="of-text-bar-text of-mobile-only">{{ section.settings.of_text_bar_mobile_text }}</p>
+          {% endif %}
+        </div>
+        <!-- Banner Bottom: end -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'section-of-banner.js' | asset_url }}" defer="defer"></script>
+{% schema %}
+{
+  "name": "Of Banner",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "of_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "of_header_text",
+      "label": "Text",
+      "default": "Text goes here"
+    },
+    {
+      "type": "text",
+      "id": "of_header_text_mobile",
+      "label": "Text mobile",
+      "default": "Text goes here for mobile"
+    },
+    {
+      "type": "text",
+      "id": "of_header_button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "of_header_button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "color",
+      "id": "of_header_bg_color",
+      "label": "Background color",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "header",
+      "content": "Banner settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "of_banner_image",
+      "label": "Banner image"
+    },
+    {
+      "type": "image_picker",
+      "id": "of_banner_image_mobile",
+      "label": "Banner image mobile"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner heading",
+      "default": "Text Here"
+    },
+    {
+      "type": "text",
+      "id": "banner_description",
+      "label": "Banner description",
+      "default": "Text description goes here"
+    },
+    {
+      "type": "text",
+      "id": "banner_description_mobile",
+      "label": "Banner description",
+      "default": "Text description goes here"
+    },
+    {
+      "type": "text",
+      "id": "of_button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "of_button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Text bar settings"
+    },
+    {
+      "type": "text",
+      "id": "of_text_bar_text",
+      "label": "Text",
+      "default": "Text goes here"
+    },
+    {
+      "type": "text",
+      "id": "of_text_bar_mobile_text",
+      "label": "Text Mobile",
+      "default": "Text goes here for mobile"
+    },
+    {
+      "type": "color",
+      "id": "of_text_bar_bg_color",
+      "label": "Background color",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Of Banner"
+    }
+  ]
+}
+{% endschema %}

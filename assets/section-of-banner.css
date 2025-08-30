@@ -1,0 +1,207 @@
+/* Banner Header styling */
+.of-header-container .of-header .of-nav {
+  display: flex;
+  gap: 20px;
+  text-align: center;
+  justify-content: space-between;
+  text-align: center;
+  height: 64px;
+}
+
+.of-header-container .of-header > .of-nav:nth-child(1) {
+  flex: 0 0 30%;
+}
+.of-header-container .of-header > .of-nav:nth-child(2) {
+  flex: 0 0 60%;
+}
+.of-header-container .of-header > .of-nav:nth-child(3) {
+  flex: 0 0 30%;
+}
+
+.of-header-container .of-header .of-nav {
+  padding: 0 50px;
+  align-items: center;
+}
+.of-header-container .of-header .of-nav p {
+  margin: 0;
+  padding: 0;
+}
+.of-header-container .of-header .of-nav .of-header-text {
+  line-height: 13.42px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+.of-header.open .of-menu-icon .hamburger {
+  display: none;
+}
+.of-menu-icon .hamburger {
+  display: block;
+}
+.of-header.open .of-menu-icon .close {
+  display: block;
+}
+.of-menu-icon .close {
+  display: none;
+}
+
+.of-header .of-header-dropdown {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  animation: max-height 5s ease;
+  align-items: center;
+}
+.of-header.open .of-header-dropdown {
+  max-height: 600px;
+  padding: 0 20px 20px;
+}
+
+.of-header .of-header-dropdown p,
+.of-header .of-header-dropdown a {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.of-header.open .of-header-dropdown p,
+.of-header.open .of-header-dropdown a {
+  opacity: 1;
+  transform: translateY(0);
+}
+.of-header .of-header-dropdown p {
+  padding: 0;
+  margin: 0;
+}
+.of-header .of-header-dropdown a {
+  width: fit-content;
+}
+/* Slide down animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Banner styling */
+.of-banner-container .of-banner {
+  position: relative;
+}
+.of-banner-container .of-banner .of-banner-content {
+  position: absolute;
+  bottom: 50px;
+  left: 67px;
+}
+
+.of-banner-container .of-banner .of-banner-content .banner-heading {
+  font-size: 70px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 0 0 50px 0;
+  padding: 0;
+}
+.of-banner-container .of-banner .of-banner-content .banner-description {
+  font-size: 20px;
+  line-height: 140%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 0 0 50px 0;
+  padding: 0;
+  width: 483px;
+}
+
+/* Banner bottom  */
+.of-banner-container .of-banner-bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.of-banner-container .of-banner-bottom .of-banner-bottom-text {
+  padding: 10px 0;
+  margin: 0px;
+  line-height: 13.42px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+/* Text bar */
+.of-text-bar-container {
+  margin: 0;
+  padding: 0;
+}
+.of-text-bar-container .of-text-bar {
+  padding: 10px 50px;
+  text-align: center;
+}
+.of-text-bar-container .of-text-bar-text {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 13.42px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 749px) {
+  /* Default theme break point for mobile */
+
+  /* Header */
+  .of-header-container .of-header .of-nav {
+    padding: 0 20px;
+    justify-content: normal;
+    position: relative;
+  }
+  .of-header-container .of-header .of-nav .of-header-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  /* Banner */
+  .of-banner-container .of-banner .of-banner-content {
+    bottom: unset;
+    left: unset;
+    padding-top: 50px;
+    text-align: center;
+    height: -webkit-fill-available;
+    position: relative;
+  }
+  .of-banner-container .of-banner .of-banner-content .banner-heading {
+    font-size: 30px;
+    line-height: 100%;
+    margin: 0 0 20px 0;
+  }
+
+  .of-banner-container .of-banner .of-banner-content .banner-description {
+    font-size: 16px;
+    line-height: 130%;
+    width: 340px;
+    margin: 0 25px;
+  }
+  .of-banner-container .of-banner .of-banner-content .of-banner-button {
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    position: absolute;
+  }
+
+  /* Text bar */
+  .of-text-bar-container .of-text-bar-text {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  /* Default theme break point for tablets */
+}
+
+@media screen and (max-width: 989px) {
+  /* Default theme break point for desktop and big screens */
+}

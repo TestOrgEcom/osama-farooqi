@@ -1,0 +1,313 @@
+{{ 'component-of-button.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'component-of-quick-view.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-of-product-collection.css' | asset_url | stylesheet_tag: preload: true }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="of-page section-{{ section.id }} section-{{ section.id }}-padding">
+    <div class="of-container of-product-collection-container">
+      {% if section.settings.of_heading %}
+        <p class="of-product-collection-heading">{{ section.settings.of_heading }}</p>
+      {% endif %}
+      <div class="of-product-collection">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'product' %}
+              {% if block.settings.product != blank %}
+                <div class="of-product-collection-item">
+                  <img
+                    src="{{ block.settings.product.featured_image | img_url: 'master'}}"
+                    alt="{{ block.settings.product.title | escape }}"
+                    width="433"
+                    height="444"
+                  >
+                  <span
+                    class="of-hotspot-icon"
+                    style="
+                      position:absolute;
+                      top: {{ block.settings.of-pos-y }}%;
+                      left: {{ block.settings.of-pos-x }}%;
+                      {% comment %} transform: translate(-50%, -50%); {% endcomment %}
+                      border-radius:50%;
+                    "
+                    data-top-mobile="{{ block.settings.of-pos-y-mobile }}"
+                    data-left-mobile="{{ block.settings.of-pos-x-mobile }}"
+                    data-handle="{{ block.settings.product.handle }}"
+                    data-product-id="{{ block.settings.product.id }}"
+                    onclick="ofShowQuickView(this)"
+                  >
+                    <img
+                      src="{{ 'icon-plus-in-circle.svg' | asset_url }}"
+                      class="of-product-popup"
+                      width="22"
+                      height="22"
+                    >
+                  </span>
+                </div>
+                <div id="of-overlay-{{ block.settings.product.id }}" class="of-overlay">
+                  <div
+                    id="of-quick-view-modal-{{ block.settings.product.id }}"
+                    data-handle="{{ block.settings.product.handle }}"
+                    class="of-quick-view"
+                    aria-modal="true"
+                  >
+                    <div class="of-quick-view-close-container">
+                      <img
+                        src="{{ "icon-close-quick-view.svg"| asset_url }}"
+                        alt="quick view close button"
+                        id="of-quick-view-close-{{ block.settings.product.id }}"
+                        class="of-quick-view-close"
+                        width="22"
+                        height="22"
+                      >
+                    </div>
+                    <div id="of-quick-view-product-info--{{ block.settings.product.id }}" class="of-quick-view-title">
+                      <!-- Product info will be loaded here dynamically -->
+                      <div class="of-product-container">
+                        <div class="of-product-details">
+                          <div class="of-product-image">
+                            <img
+                              src="{{ block.settings.product.featured_image | img_url: 'master'}}"
+                              alt="{{ block.settings.product.alt | img_url: 'master'}}"
+                              width="120"
+                              height="140"
+                            >
+                          </div>
+                          <div class="of-product-info">
+                            <h2 class="of-product-title">{{ block.settings.product.title }}</h2>
+                            <p class="of-product-price">{{ block.settings.product.price | money_with_currency }}</p>
+                            <p class="of-product-description">{{ block.settings.product.description | strip_html }}</p>
+                          </div>
+                        </div>
+                        <div class="of-product-varients">
+                          <div class="of-product-varients-optins">
+                            {% for option in block.settings.product.options_with_values %}
+                              {% liquid
+                                assign option_name = option.name | downcase
+                              %}
+                              {% case option_name %}
+                                {% when 'color', 'colour' %}
+                                  <div class="of-option-color">
+                                    {{ option.name }}
+                                    <div class="of-option-color-values">
+                                      {% for value in option.values %}
+                                        <div
+                                          class="of-color-swatch"
+                                          data-product-id="{{ block.settings.product.id }}"
+                                          onclick="selectColorSwatch(this)"
+                                          {% comment %} style="background-color: {{ value | downcase }};" {% endcomment %}
+                                          title="{{ value }}"
+                                          data-value="{{ value }}"
+                                        >
+                                          <span
+                                            class=""
+                                            style="background-color: {{ value | downcase }}; "
+                                          ></span>
+                                          <p class="of-swatch-name">{{ value | downcase }}</p>
+                                        </div>
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                {% when 'size' %}
+                                  <div class="of-option-size">
+                                    {{ option.name }}
+                                    <div
+                                      name="size"
+                                      id="of-size-select-{{ block.settings.product.id }}"
+                                      class="of-size-dropdown"
+                                    >
+                                      <div class="of-size-dropdown-title">
+                                        <p class="of-size-dropdown-title-text">Choose your size</p>
+                                        <span
+                                          class="of-dropdown-icon"
+                                          onclick="showSelectionDropdown(this)"
+                                          data-prodcut-id="{{ block.settings.product.id }}"
+                                        >
+                                          <img
+                                            src="{{ 'icon-dropdown-down-arrow-down.svg' | asset_url }}"
+                                            class="icon-arrow-down"
+                                            width="12"
+                                            height="6"
+                                          >
+                                          <img
+                                            src="{{ 'icon-dropdown-down-arrow-up.svg' | asset_url }}"
+                                            class="icon-arrow-up          "
+                                            width="12"
+                                            height="6"
+                                          >
+                                        </span>
+                                      </div>
+                                      <div class="of-size-dropdown-values">
+                                        {% for value in option.values %}
+                                          <p
+                                            data-value="{{ value | upcase }}"
+                                            class="of-size-values-items"
+                                            data-product-id="{{ block.settings.product.id }}"
+                                          >
+                                            {{ value | upcase }}
+                                          </p>
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  </div>
+                              {% endcase %}
+                            {% endfor %}
+                          </div>
+                          <p
+                            class="sweep-link of-button of-button-scandory of-custom-add-to-cart"
+                            onclick="addProductToCart(this)"
+                            data-product-id="{{ block.settings.product.id }}"
+                            aria-label="add to cart button"
+                          >
+                            ADD TO CART
+                            <img alt="Banner Icon" width="24" height="auto" style="margin-left: 20px;">
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'of-quick-view-updated.js' | asset_url }}" defer="defer"></script>
+
+<script src="{{ 'section-of-product-colleciton.js' | asset_url }}" defer="defer"></script>
+{% schema %}
+{
+  "name": "Of product Collection",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "of_heading",
+      "label": "Heading",
+      "default": "Text goes here"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select product"
+        },
+        {
+          "type": "range",
+          "id": "of-pos-x",
+          "label": "Horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-y",
+          "label": "Vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-x-mobile",
+          "label": "Horizontal position mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "of-pos-y-mobile",
+          "label": "Vertical position mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Of product Collection",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "lustria";
+  src: url("https://cdn.shopify.com/s/files/1/0705/7807/7862/files/lustria.woff2?v=1756479133")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "jost";
+  src: url("https://cdn.shopify.com/s/files/1/0705/7807/7862/files/Jost-Regular.woff2?v=1756366693")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "jost-light";
+  src: url("https://cdn.shopify.com/s/files/1/0705/7807/7862/files/jost-light.woff2?v=1756495494")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+.of-container,
+.of-container h2 {
+  font-family: "jost", sans-serif !important;
+}
+
+.of-container {
+  color: #000000;
+  vertical-align: middle;
+  size: 16px;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+
+.of-desktop-only {
+  display: block;
+}
+.of-mobile-only {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .of-desktop-only {
+    display: none;
+  }
+  .of-mobile-only {
+    display: block;
+  }
+}

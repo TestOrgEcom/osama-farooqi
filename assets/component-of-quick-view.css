@@ -1,0 +1,171 @@
+/* Popup style */
+.of-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+.of-quick-view {
+  /* display: none; */
+  /* position: absolute; */
+  background: #fff;
+  padding: 10px 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  min-width: 120px;
+  z-index: 10;
+  max-width: 311px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+.of-quick-view-close-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.of-product-container p {
+  margin: 0;
+}
+.of-product-container .of-product-details {
+  display: flex;
+  justify-content: space-between;
+}
+.of-product-container .of-product-details .of-product-info {
+  padding: 0 10px;
+  text-align: left;
+}
+.of-product-container .of-product-details .of-product-title {
+  font-family: "jost-light", sans-serif !important;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 5px 0;
+}
+
+.of-product-container .of-product-details .of-product-price {
+  font-family: "lustria", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  margin: 10px 0;
+}
+.of-product-container .of-product-details .of-product-description {
+  font-family: "jost-light", sans-serif !important;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 110.00000000000001%;
+  margin: 5px 0;
+  /* letter-spacing: -1%; this property is not applicable in percentage. We tried in px but it did not match the design so we commented this */
+}
+
+/* quick view > product */
+.of-product-varients .of-option-color,
+.of-product-varients .of-option-size {
+  display: block;
+  text-align: start;
+}
+.of-product-varients-optins {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column-reverse;
+}
+.of-product-varients .of-option-color .of-option-color-values {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid;
+}
+
+.of-product-varients .of-option-color .of-option-color-values .of-color-swatch {
+  width: 100%;
+  display: flex;
+}
+.of-product-varients
+  .of-option-color
+  .of-option-color-values
+  .of-color-swatch
+  span {
+  border: 0.5px solid #000;
+  width: 5px;
+}
+.of-product-varients
+  .of-option-color
+  .of-option-color-values
+  .of-color-swatch.selected
+  .of-swatch-name {
+  background: #000000;
+  color: #ffffff;
+  width: 100%;
+  padding-left: 10px;
+}
+
+/* dropdown */
+.of-size-dropdown {
+  position: relative;
+  border: 1px solid;
+}
+
+.of-size-dropdown .of-size-dropdown-title {
+  display: flex;
+  text-align: start;
+  margin: 0px;
+  padding: 0 10px;
+}
+
+.of-size-dropdown .of-size-dropdown-title .of-dropdown-icon {
+  right: 0;
+  position: absolute;
+  border-left: 1px solid;
+  padding: 0 10px;
+  height: 100%;
+}
+
+.of-size-dropdown-values {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  width: 100%;
+  min-width: 160px;
+  border: 1px solid;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.of-size-dropdown-values .of-size-values-items {
+  color: #333;
+  text-align: center;
+}
+
+.of-size-dropdown-values .of-size-values-items:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* Show on hover */
+/* .of-size-dropdown:hover .of-size-dropdown-values */
+.of-size-dropdown.open .of-size-dropdown-values {
+  display: flex;
+}
+.of-size-dropdown .icon-arrow-down {
+  display: inline-block;
+}
+.of-size-dropdown.open .icon-arrow-down {
+  display: none;
+}
+.of-size-dropdown .icon-arrow-up {
+  display: none;
+}
+.of-size-dropdown.open .icon-arrow-up {
+  display: inline-block;
+}
