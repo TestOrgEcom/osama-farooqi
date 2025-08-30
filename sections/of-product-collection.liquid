@@ -60,6 +60,7 @@
                 <div id="of-overlay-{{ block.settings.product.id }}" class="of-overlay">
                   <div
                     id="of-quick-view-modal-{{ block.settings.product.id }}"
+                    data-handle="{{ block.settings.product.handle }}"
                     class="of-quick-view"
                     aria-modal="true"
                   >
@@ -105,14 +106,17 @@
                                       {% for value in option.values %}
                                         <div
                                           class="of-color-swatch"
+                                          data-product-id="{{ block.settings.product.id }}"
+                                          onclick="selectColorSwatch(this)"
                                           {% comment %} style="background-color: {{ value | downcase }};" {% endcomment %}
                                           title="{{ value }}"
+                                          data-value="{{ value }}"
                                         >
                                           <span
                                             class=""
                                             style="background-color: {{ value | downcase }}; "
                                           ></span>
-                                          {{ value | downcase }}
+                                          <p class="of-swatch-name">{{ value | downcase }}</p>
                                         </div>
                                       {% endfor %}
                                     </div>
@@ -125,28 +129,34 @@
                                       id="of-size-select-{{ block.settings.product.id }}"
                                       class="of-size-dropdown"
                                     >
-                                      <p class="of-size-dropdown-title">
-                                        Choose your size
+                                      <div class="of-size-dropdown-title">
+                                        <p class="of-size-dropdown-title-text">Choose your size</p>
                                         <span
+                                          class="of-dropdown-icon"
                                           onclick="showSelectionDropdown(this)"
                                           data-prodcut-id="{{ block.settings.product.id }}"
-                                          ><img
+                                        >
+                                          <img
                                             src="{{ 'icon-dropdown-down-arrow-down.svg' | asset_url }}"
                                             class="icon-arrow-down"
                                             width="12"
-                                            height="6">
+                                            height="6"
+                                          >
                                           <img
                                             src="{{ 'icon-dropdown-down-arrow-up.svg' | asset_url }}"
                                             class="icon-arrow-up          "
                                             width="12"
                                             height="6"
-                                        ></span>
-                                      </p>
-                                      <div
-                                        class="of-size-dropdown-values"
-                                      >
+                                          >
+                                        </span>
+                                      </div>
+                                      <div class="of-size-dropdown-values">
                                         {% for value in option.values %}
-                                          <p value="{{ value | downcase }}" class="of-size-values-items">
+                                          <p
+                                            data-value="{{ value | upcase }}"
+                                            class="of-size-values-items"
+                                            data-product-id="{{ block.settings.product.id }}"
+                                          >
                                             {{ value | upcase }}
                                           </p>
                                         {% endfor %}
@@ -156,15 +166,15 @@
                               {% endcase %}
                             {% endfor %}
                           </div>
-                          <a
-                            href=""
-                            class="sweep-link of-button of-button-scandory of-desktop-only"
+                          <p
+                            class="sweep-link of-button of-button-scandory of-custom-add-to-cart"
+                            onclick="addProductToCart(this)"
+                            data-product-id="{{ block.settings.product.id }}"
                             aria-label="add to cart button"
                           >
                             ADD TO CART
                             <img alt="Banner Icon" width="24" height="auto" style="margin-left: 20px;">
-                            <!-- Arrow Icon, will replace the icon using css styling -->
-                          </a>
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -177,76 +187,91 @@
     </div>
   </div>
 </div>
+<script>
+  function addProductToCart(cartButton) {
+    cartButton.addEventListener('click', function () {
+      // 1. Get user-selected options
+      const productId = this.getAttribute('data-product-id');
+      const ofQuickViewModal = document.getElementById('of-quick-view-modal-' + productId);
+      console.log('ofQuickViewModal productId');
+      console.log('of-quick-view-modal-' + productId);
+      const selectedColor = ofQuickViewModal.querySelector('.of-color-swatch.selected').getAttribute('data-value');
+      const selectedSize = ofQuickViewModal.querySelector('.of-size-values-items.selected').getAttribute('data-value');
 
-<!-- add hidden in of-quick-view class -->
-{% comment %}
-  <div id="of-overlay-{{ section.id }}" class="of-overlay">
-    <div
-      id="of-quick-view-modal-{{ section.id }}"
-      class="of-quick-view"
-      aria-modal="true"
-    >
-      <div class="of-quick-view-close-container">
-        <img
-          src="{{ "icon-close-quick-view.svg"| asset_url }}"
-          alt="quick view close button"
-          id="of-quick-view-close-{{ section.id }}"
-          class="of-quick-view-close"
-          width="22"
-          height="22"
-        >
-      </div>
-      <div id="of-quick-view-product-info--{{ section.id }}" class="of-quick-view-title">
-        <!-- Product info will be loaded here dynamically -->
-      </div>
-    </div>
-  </div>
-{% endcomment %}
+      console.log('Selected Color:', selectedColor);
+      console.log('Selected Size:', selectedSize);
+      // 2. Find matching variant (Shopify passes all variants to window object)
+      const productHandle = ofQuickViewModal.getAttribute('data-handle'); // from your hotspot
+      
+      fetch(`/products/${productHandle}.js`)
+        .then((res) => res.json())
+        .then((product) => {
+          // addToCartWithVariant(product, selectedColor, selectedSize);
+          let matchedVariant = product.variants.find((v) => {
+          
+            return v.option2 === selectedColor && v.option1 === selectedSize;
+          });
 
+          if (!matchedVariant) {
+            alert('This combination is not available.');
+            return;
+          }
+
+          // 3. Add to cart using AJAX
+          fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              id: matchedVariant.id,
+              quantity: 1,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log('Added to cart:', data);
+              alert('Product added to cart!');
+            })
+            .catch((err) => console.error('Error:', err));
+        })
+        .catch((err) => console.error(err));
+    });
+  }
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     console.log('Quick view script loaded');
-    
-    
-    
-    //const hotspots = document.querySelectorAll('.of-hotspot-icon');
-    const overlay = document.getElementById('of-overlay-{{ section.id }}');
-    const closeBtn = document.getElementById('of-quick-view-close-{{ section.id }}');
+    const ofSizeValuesItems = document.querySelectorAll('.of-size-values-items');
 
-    {% comment %} hotspots.forEach((hotspot) => {
-      hotspot.addEventListener('click', () => {
-        const productHandle = hotspot.getAttribute('data-handle');
-        const productInfoContainer = document.getElementById('of-quick-view-product-info--{{ section.id }}');
-        productInfoContainer.innerHTML = 'loading...';
+    ofSizeValuesItems.forEach((item) => {
+      item.addEventListener('click', function () {
+        const selectedValue = item.getAttribute('value');
+        const productId = item.getAttribute('data-product-id');
+        const dropdown = document.getElementById('of-size-select-' + productId);
+        const title = dropdown.querySelector('.of-size-dropdown-title-text');
+        ofSizeValuesItems.forEach((innerItem) => {
+          innerItem.classList.remove('selected');
+        });
+        item.classList.add('selected');
 
-        // Fetch product info from Shopify's Storefront API
-        fetch(`/products/${productHandle}.js`)
-          .then((response) => response.json())
-          .then((product) => {
-            // Populate the popup with product info
-            productInfoContainer.innerHTML = `
-            <div class="of-product-container">
-              <div class="of-product-image">  
-              <img src="${product.images[0]}" alt="${product.title}" width="120" height="140">
-              </div>
-              <div class="of-product-info">
-                <h2 class="of-product-title">${product.title}</h2>
-                <p class="of-product-price">Price: ${(product.price / 100).toFixed(2)}</p>
-                <p class="of-product-description">${product.description.replace(/<[^>]+>/g, '')}</p>
-              </div>
-            </div>  
-            
-            `;
-          })
-          .catch((error) => {
-            console.error('Error fetching product data:', error);
-            productInfoContainer.innerHTML = '<p>Error loading product information.</p>';
-          });
+        dropdown.classList.remove('open');
 
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // disable scroll
+        title.textContent = selectedValue;
       });
-    }); 
+    });
+  });
+
+  function ofShowQuickView(quickViewModel) {
+    console.log('ofShowQuickView clicked');
+    const productId = quickViewModel.getAttribute('data-product-id');
+    const overlay = document.getElementById('of-overlay-' + productId);
+    const closeBtn = document.getElementById('of-quick-view-close-' + productId);
+
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // disable scroll
+
     closeBtn.addEventListener('click', () => {
       overlay.style.display = 'none';
       document.body.style.overflow = 'auto'; // enable scroll back
@@ -258,45 +283,39 @@
         overlay.style.display = 'none';
         document.body.style.overflow = 'auto';
       }
-    }); {% endcomment %}
+    });
+  }
 
+  function selectColorSwatch(swatch) {
+    const productId = swatch.getAttribute('data-product-id');
+    const swatches = document.querySelectorAll('.of-color-swatch');
 
-
-  });
-
-    function ofShowQuickView(quickViewModel){
-          console.log('ofShowQuickView clicked');
-          const productId = quickViewModel.getAttribute('data-product-id');
-          const overlay = document.getElementById('of-overlay-'+ productId);
-          const closeBtn = document.getElementById('of-quick-view-close-'+ productId);
-
-          overlay.style.display = 'flex';
-          document.body.style.overflow = 'hidden'; // disable scroll
-            
-          closeBtn.addEventListener('click', () => {
-            overlay.style.display = 'none';
-            document.body.style.overflow = 'auto'; // enable scroll back
-          });
-
-        // Close if clicking outside popup
-        overlay.addEventListener('click', (e) => {
-          if (e.target === overlay) {
-            overlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
-          }
+    swatches.forEach((item) => {
+      item.addEventListener('click', function () {
+        swatches.forEach((innerItem) => {
+          innerItem.classList.remove('selected');
         });
-    }
+        item.classList.add('selected');
+      });
+    });
 
-    function showSelectionDropdown(downarrow){
-      const productId = downarrow.getAttribute('data-prodcut-id');
-      const dropdownSelect = document.getElementById('of-size-select-' + productId);
-      // Toggle visibility
-      dropdownSelect.classList.toggle('open');
-    }
+    swatch.classList.add('selected');
+  }
+
+  function showSelectionDropdown(downarrow) {
+    const productId = downarrow.getAttribute('data-prodcut-id');
+    const dropdownSelect = document.getElementById('of-size-select-' + productId);
+    const dropdown = document.getElementById('of-size-select-' + productId);
+    const title = dropdown.querySelector('.of-size-dropdown-title-text');
+    console.log('ofShowQuickView title', title.textContent);
+    title.textContent = 'Choose your size';
+
+    // Toggle visibility
+    dropdownSelect.classList.toggle('open');
+  }
 </script>
 {% comment %} <script src="{{ 'of-quick-view.js' | asset_url }}" defer="defer"></script> {% endcomment %}
 
-{% comment %} {% render 'of-quick-view' %} {% endcomment %}
 <script src="{{ 'section-of-product-colleciton.js' | asset_url }}" defer="defer"></script>
 {% schema %}
 {

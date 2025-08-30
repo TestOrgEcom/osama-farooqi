@@ -95,7 +95,16 @@
   span {
   border: 0.5px solid #000;
   width: 5px;
-  margin-right: 10px;
+}
+.of-product-varients
+  .of-option-color
+  .of-option-color-values
+  .of-color-swatch.selected
+  .of-swatch-name {
+  background: #000000;
+  color: #ffffff;
+  width: 100%;
+  padding-left: 10px;
 }
 
 /* dropdown */
@@ -105,12 +114,13 @@
 }
 
 .of-size-dropdown .of-size-dropdown-title {
+  display: flex;
   text-align: start;
   margin: 0px;
   padding: 0 10px;
 }
 
-.of-size-dropdown .of-size-dropdown-title span {
+.of-size-dropdown .of-size-dropdown-title .of-dropdown-icon {
   right: 0;
   position: absolute;
   border-left: 1px solid;
